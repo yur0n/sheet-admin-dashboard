@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { CustomDataProvider } from "../dataProvider";
-import { useRecordContext, useRefresh, useDataProvider, useNotify, Button } from "react-admin";
+import {
+  useRecordContext,
+  useRefresh,
+  useDataProvider,
+  useNotify,
+  Button,
+} from "react-admin";
 import {
   TextField,
   Dialog,
@@ -8,7 +14,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 export default function SendMessageDialog() {
   const dataProvider = useDataProvider() as CustomDataProvider;
@@ -27,26 +33,27 @@ export default function SendMessageDialog() {
   };
 
   const sendMessage = async () => {
-    dataProvider.sendMessage('send-message', {
-			message,
-			data: [{ userId: record["id"].toString(), chatId: record["telegram"] }]
-		})
-    .then((response) => {
-      if (response.status) {
-        notify(response.status)
-      }
-      if (response.ok) {
-        handleClose();
-        refresh();
-      }
-    });
+    dataProvider
+      .sendMessage("send-message", {
+        message,
+        data: [{ userId: record["id"].toString(), chatId: record["telegram"] }],
+      })
+      .then((response) => {
+        if (response.status) {
+          notify(response.status);
+        }
+        if (response.ok) {
+          handleClose();
+          refresh();
+        }
+      });
   };
 
   return (
     <>
       <Button onClick={handleClickOpen}>
-				<SendIcon />
-			</Button>
+        <SendIcon />
+      </Button>
       <Dialog
         maxWidth="xl"
         open={open}

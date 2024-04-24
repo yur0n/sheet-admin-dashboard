@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { CustomDataProvider } from "../dataProvider";
-import { useListContext, useRefresh, useNotify, useUnselect, useUnselectAll, Button, useDataProvider } from "react-admin";
+import {
+  useListContext,
+  useRefresh,
+  useNotify,
+  useUnselect,
+  useUnselectAll,
+  Button,
+  useDataProvider,
+} from "react-admin";
 import {
   TextField,
   Dialog,
@@ -8,15 +16,15 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 export default function BulkSendMessageButton() {
-	const dataProvider = useDataProvider() as CustomDataProvider;
-	const { selectedIds, data, resource } = useListContext();
+  const dataProvider = useDataProvider() as CustomDataProvider;
+  const { selectedIds, data, resource } = useListContext();
   const unselect = useUnselect(resource);
   const refresh = useRefresh();
-	const notify = useNotify();
-	const unselectAll = useUnselectAll('users');
+  const notify = useNotify();
+  const unselectAll = useUnselectAll("users");
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -28,31 +36,35 @@ export default function BulkSendMessageButton() {
     setOpen(false);
   };
 
-	const usersToSend: { userId: any; chatId: any; }[] = [];
+  const usersToSend: { userId: any; chatId: any }[] = [];
 
-	data.forEach((user) => {
-		if (selectedIds.includes(user.id)) {
-			usersToSend.push({userId: user.id, chatId: user.telegram});
-		}
-	});
-	
+  data.forEach((user) => {
+    if (selectedIds.includes(user.id)) {
+      usersToSend.push({ userId: user.id, chatId: user.telegram });
+    }
+  });
+
   const sendMessage = async () => {
-		if (!message) return;
+    if (!message) return;
 
-		dataProvider.sendMessage('send-message', {
-			message,
-			data: usersToSend,
-		}).then(response => {
-      if (response.status) {
-        notify(response.status)
-      }
-      if (response.ok) {
-        unselectAll();
-      } else {
-        const toUnselect = response.result.filter(r => r.delivered).map(r => r.id)
-        unselect(toUnselect)
-      }
-    })
+    dataProvider
+      .sendMessage("send-message", {
+        message,
+        data: usersToSend,
+      })
+      .then((response) => {
+        if (response.status) {
+          notify(response.status);
+        }
+        if (response.ok) {
+          unselectAll();
+        } else {
+          const toUnselect = response.result
+            .filter((r) => r.delivered)
+            .map((r) => r.id);
+          unselect(toUnselect);
+        }
+      });
 
     handleClose();
     refresh();
@@ -60,9 +72,9 @@ export default function BulkSendMessageButton() {
 
   return (
     <>
-			<Button label="Send to all" onClick={handleClickOpen}>
-				<SendIcon />
-			</Button>
+      <Button label="Send to all" onClick={handleClickOpen}>
+        <SendIcon />
+      </Button>
       <Dialog
         maxWidth="xl"
         open={open}

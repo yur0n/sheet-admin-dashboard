@@ -1,7 +1,4 @@
-import {
-  Admin,
-  Resource,
-} from "react-admin";
+import { Admin, Resource } from "react-admin";
 import { UserList, UserEdit } from "./users";
 import UserShow from "./userShow";
 import { MessageList } from "./messages";

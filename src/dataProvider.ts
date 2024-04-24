@@ -1,11 +1,10 @@
-
 import jsonServerProvider from "ra-data-json-server";
-import { DataProvider } from 'ra-core';
+import { DataProvider } from "ra-core";
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 import { fetchUtils } from "react-admin";
 
 interface Users {
-  data: { 
+  data: {
     userId: string;
     chatId: string;
   }[];
@@ -19,7 +18,10 @@ interface SendMessageResponse {
 }
 
 export interface CustomDataProvider extends DataProvider {
-  sendMessage: (resource: string, params: Users) => Promise<SendMessageResponse>;
+  sendMessage: (
+    resource: string,
+    params: Users
+  ) => Promise<SendMessageResponse>;
 }
 
 const originalDataProvider = jsonServerProvider(apiUrl) as CustomDataProvider;
@@ -27,10 +29,11 @@ const originalDataProvider = jsonServerProvider(apiUrl) as CustomDataProvider;
 export const dataProvider: CustomDataProvider = {
   ...originalDataProvider,
   sendMessage: async (resource, params) => {
-    return fetchUtils.fetchJson(`${apiUrl}/${resource}`, {
-        method: 'POST',
+    return fetchUtils
+      .fetchJson(`${apiUrl}/${resource}`, {
+        method: "POST",
         body: JSON.stringify(params),
-    }).then(({ json }) => json)
+      })
+      .then(({ json }) => json);
   },
 };
-
