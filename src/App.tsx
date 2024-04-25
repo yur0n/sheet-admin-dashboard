@@ -4,9 +4,14 @@ import UserShow from "./userShow";
 import { MessageList } from "./messages";
 import { dataProvider } from "./dataProvider";
 import { authProvider } from "./authProvider";
+import { i18nProvider } from './i18nProvider';
 
 export const App = () => (
-  <Admin dataProvider={dataProvider} authProvider={authProvider}>
+  <Admin 
+    dataProvider={dataProvider} 
+    authProvider={authProvider}
+    i18nProvider={i18nProvider}
+  >
     <Resource
       name="users"
       list={UserList}

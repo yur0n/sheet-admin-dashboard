@@ -6,10 +6,12 @@ import {
   useNotify,
   useDataProvider,
   Button,
+  useTranslate,
 } from "react-admin";
 import { CustomDataProvider } from "../dataProvider";
 
 export default function SendMessage() {
+  const translate = useTranslate();
   const dataProvider = useDataProvider() as CustomDataProvider;
   const [message, setMessage] = useState("");
   const record = useRecordContext();
@@ -26,12 +28,16 @@ export default function SendMessage() {
       })
       .then((res) => {
         if (res.status) {
-          notify(res.status);
+          notify(translate(`server.res.${res.status}`));
           if (res.ok) {
             setMessage("");
             refresh();
           }
         }
+      })
+      .catch((e) => {
+        console.error(e);
+        notify(translate('server.res.400'));
       });
   };
 
@@ -39,13 +45,13 @@ export default function SendMessage() {
     <>
       <TextField
         id="outlined-password-input"
-        label="Write Message"
+        label={translate('custom.labels.message')}
         value={message}
-        placeholder="Message"
+        placeholder={translate('custom.labels.writeMessage')}
         fullWidth
         onChange={(e) => setMessage(e.target.value)}
       />
-      <Button label="Send Message" variant="contained" onClick={sendMessage} />
+      <Button label='custom.action.sendMessage' variant="contained" onClick={sendMessage} />
     </>
   );
 }

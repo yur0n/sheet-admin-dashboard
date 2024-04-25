@@ -1,40 +1,27 @@
+
 import { CustomDataProvider } from "../dataProvider";
 import { DialogWindow } from "./sendMessageBox";
 import {
-  useListContext,
+  useRecordContext,
   useRefresh,
-  useNotify,
-  useUnselect,
-  useUnselectAll,
   useDataProvider,
+  useNotify,
   useTranslate,
 } from "react-admin";
 
 
-export default function BulkSendMessageButton() {
+export default function SendMessageDialog() {
   const dataProvider = useDataProvider() as CustomDataProvider;
-  const { selectedIds, data, resource } = useListContext();
   const translate = useTranslate();
-  const unselect = useUnselect(resource);
+  const record = useRecordContext();
   const refresh = useRefresh();
   const notify = useNotify();
-  const unselectAll = useUnselectAll("users");
-
-  const usersToSend: { userId: any; chatId: any }[] = [];
-
-  data.forEach((user) => {
-    if (selectedIds.includes(user.id)) {
-      usersToSend.push({ userId: user.id, chatId: user.telegram });
-    }
-  });
 
   const sendMessage = async (message: string, setOpen: (v: boolean) => void) => {
-    if (!message) return;
-
     dataProvider
       .sendMessage("send-message", {
         message,
-        data: usersToSend,
+        data: [{ userId: record["id"].toString(), chatId: record["telegram"] }],
       })
       .then((res) => {
         if (res.status) {
@@ -42,23 +29,16 @@ export default function BulkSendMessageButton() {
         }
         if (res.ok) {
           setOpen(false);
-          unselectAll();
-        } else {
-          const toUnselect = res.result
-            .filter((r) => r.delivered)
-            .map((r) => r.id);
-          unselect(toUnselect);
+          refresh();
         }
       })
       .catch((e) => {
         console.error(e);
         notify(translate('server.res.400'));
       });
-
-    refresh();
   };
 
   return (
-    <DialogWindow sendMessage={sendMessage} buttonLabel={'custom.action.bulkSendMessage'} />
+    <DialogWindow sendMessage={sendMessage} buttonLabel={''} />
   );
 }

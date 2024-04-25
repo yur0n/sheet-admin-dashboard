@@ -9,7 +9,7 @@ import {
 } from "react-admin";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import SendMessage from "./components/sendMessage";
+import SendMessage from "./components/sendMessageChat";
 
 export default function UserShow() {
   const refresh = useRefresh();
@@ -31,14 +31,13 @@ export default function UserShow() {
   return (
     <Show>
       <TabbedShowLayout>
-        <TabbedShowLayout.Tab label="chat">
+        <TabbedShowLayout.Tab label='custom.fields.chat'>
           <ReferenceManyField
             pagination={<Pagination />}
             sort={{ field: "date", order: "DESC" }}
             perPage={10}
             reference="messages"
             target="userId"
-            label="Messages"
           >
             <SimpleList
               rowSx={(record) => ({
@@ -61,7 +60,8 @@ export default function UserShow() {
             <SendMessage />
           </ReferenceManyField>
         </TabbedShowLayout.Tab>
-        <TabbedShowLayout.Tab label="summary" path="summary">
+        <TabbedShowLayout.Tab label='custom.fields.summary' path="summary">
+        <TextField source="phone" />
           <TextField source="phone" />
           <TextField source="telegram" />
           <TextField source="name" />

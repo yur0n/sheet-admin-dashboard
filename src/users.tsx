@@ -10,7 +10,7 @@ import {
   TextInput,
   BulkDeleteButton,
 } from "react-admin";
-import SendMessageDialog from "./components/sendMessageDialog";
+import SendMessageDialog from "./components/sendMessageButton";
 import BulkSendMessageButton from "./components/bulkSendMessageButton";
 
 const UserListActionButtons = () => (
@@ -23,14 +23,13 @@ const UserListActionButtons = () => (
 export const UserList = () => (
   <List>
     <Datagrid bulkActionButtons={<UserListActionButtons />}>
-      <ReferenceField source="id" reference="users" link="show" label="phone">
+      <ReferenceField source="id" reference="users" link="show">
         <TextField source="phone" />
       </ReferenceField>
       <TextField source="telegram" />
       <TextField source="name" />
-      <TextField source="username" label="username" />
+      <TextField source="username" />
       <ReferenceManyCount
-        label="№ Messages"
         reference="messages"
         target="userId"
       />
@@ -44,7 +43,6 @@ export const UserList = () => (
 export const UserEdit = () => (
   <Edit>
     <SimpleForm>
-      <TextInput source="id" />
       <TextInput source="phone" />
       <TextInput source="telegram" />
       <TextInput source="name" />
