@@ -1,4 +1,4 @@
-import { Admin, Resource } from "react-admin";
+import { Admin, Resource, houseLightTheme, houseDarkTheme } from "react-admin";
 import { UserList, UserEdit } from "./users";
 import UserShow from "./userShow";
 import { MessageList } from "./messages";
@@ -11,6 +11,8 @@ export const App = () => (
     dataProvider={dataProvider} 
     authProvider={authProvider}
     i18nProvider={i18nProvider}
+    theme={houseLightTheme}
+    darkTheme={houseDarkTheme}
   >
     <Resource
       name="users"

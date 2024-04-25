@@ -61,7 +61,6 @@ export default function UserShow() {
           </ReferenceManyField>
         </TabbedShowLayout.Tab>
         <TabbedShowLayout.Tab label='custom.fields.summary' path="summary">
-        <TextField source="phone" />
           <TextField source="phone" />
           <TextField source="telegram" />
           <TextField source="name" />
